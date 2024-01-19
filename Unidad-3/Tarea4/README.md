@@ -1,3 +1,4 @@
+<div align="justify">
 # Tarea 4
 
 ### Modelo E-R sin normalizar
@@ -17,11 +18,11 @@ Tras la **3ºFN** nos quedarian el modelo E-R y el modelo Relacional de la sigui
 
 ### Modelo E-R
 
-<img src="https://github.com/Cesardrom/basedatos/blob/main/Unidad-3/Tarea4/img/Diagrama%20Relacional.png">
+<img src="https://github.com/Cesardrom/basedatos/blob/main/Unidad-3/Tarea4/img/Diagrama%20E-R.png">
 
 ### Modelo Relacional
 
-<img src="https://github.com/Cesardrom/basedatos/blob/main/Unidad-3/Tarea4/img/Diagrama%20Relacional.png">
+<img src="https://github.com/Cesardrom/basedatos/blob/main/Unidad-3/Tarea4/img/Diagrama%20Relacional(1).png">
 
 ### Base de datos
 
@@ -555,3 +556,4 @@ SELECT * from productos as p  WHERE p.precio > (SELECT AVG(precio) as precio_med
 │ 20 │ Cerveza         │ Bebidas   │ 3.8    │
 └────┴─────────────────┴───────────┴────────┘
 ```
+</div>
