@@ -8,6 +8,7 @@
 CREATE DATABASE IF NOT EXISTS empresa;
 USE empresa;
 
+drop table if exists empleados;
 
 CREATE TABLE empleados (
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -40,9 +41,9 @@ select * from empleados;
 +----+--------+---------+
 | id | nombre | salario |
 +----+--------+---------+
-|  1 | Juan   | 3300.00 |
-|  2 | María  | 3850.00 |
-|  3 | Pedro  | 3520.00 |
+|  1 | Juan   | 3000.00 |
+|  2 | María  | 3500.00 |
+|  3 | Pedro  | 3200.00 |
 +----+--------+---------+
 ```
 
@@ -55,6 +56,7 @@ select * from empleados;
 <br>
 
 ```sql
+  drop procedure if exists aumentar_salarios;
   DELIMITER //
   CREATE PROCEDURE aumentar_salarios(IN porcentaje DECIMAL(5,2))
   BEGIN
@@ -90,6 +92,7 @@ select * from empleados;
 
 ```sql
 CALL aumentar_salarios(10);
+select * from empleados;
 
   +----+--------+---------+
   | id | nombre | salario |
@@ -110,7 +113,7 @@ CALL aumentar_salarios(10);
 
 ```sql
  DELIMITER //
-  CREATE PROCEDURE aumentar_salarios(IN porcentaje DECIMAL(5,2), IN salario_min DECIMAL(10, 2))
+  CREATE PROCEDURE aumentar_salarios_5(IN porcentaje DECIMAL(5,2), IN salario_min DECIMAL(10, 2))
   BEGIN
       DECLARE done INT DEFAULT FALSE;
       DECLARE emp_id INT;
@@ -143,9 +146,16 @@ CALL aumentar_salarios(10);
 <br>
 
 ```sql
-CALL aumentar_salarios(5, 3200);
+CALL aumentar_salarios_5(5, 3200);
+select * from empleados;
 
-
++----+--------+---------+
+| id | nombre | salario |
++----+--------+---------+
+|  1 | Juan   | 3465.00 |
+|  2 | María  | 4042.50 |
+|  3 | Pedro  | 3696.00 |
++----+--------+---------+
 ```
 
 <br>
@@ -173,7 +183,7 @@ CALL aumentar_salarios(5, 3200);
           IF done THEN
               LEAVE read_loop;
           END IF;
-          UPDATE empleados SET salario = salario * 12  WHERE id = emp_id;
+          select id, nombre, salario * meses as salario_anual from empleados; 
       END LOOP;
       CLOSE cur;
   END //
@@ -191,9 +201,16 @@ CALL aumentar_salarios(5, 3200);
 <br>
 
 ```sql
-CALL aumentar_salarios(12);
+CALL salario_anual(12);
+select * from empleados;
 
-
++----+--------+---------------+
+| id | nombre | salario_anual |
++----+--------+---------------+
+|  1 | Juan   |      41580.00 |
+|  2 | María  |      48510.00 |
+|  3 | Pedro  |      44352.00 |
++----+--------+---------------+
 ```
 
 <br>
@@ -240,10 +257,18 @@ CALL aumentar_salarios(12);
 
 ```sql
 CALL rango_salarios(0, 3000);
-Call rango_salarios(3000, 5000)
-Call rango_salarios(5000, 10000000)
+Call rango_salarios(3000, 5000);
+Call rango_salarios(5000, 10000000);
 
+Solo da resultado la 2 ya que no hay salarios ni menores de 3000 ni mayores de 5000
 
++----+--------+---------+
+| id | nombre | salario |
++----+--------+---------+
+|  1 | Juan   | 3465.00 |
+|  2 | María  | 4042.50 |
+|  3 | Pedro  | 3696.00 |
++----+--------+---------+
 ```
 
 <br>
