@@ -1,4 +1,5 @@
 <div align="justify">
+    
 # Tarea 4
 
 ### Modelo E-R sin normalizar
@@ -198,7 +199,7 @@ SELECT nombre, max(precio) as mas_caro from productos group by categoria
 8. Listar los productos que no han sido vendidos.
 
 ```sql
-elect *from productos where id not in(select p.id from productos as p, ventas as v where p.id = v.id_producto)
+elect * from productos where id not in(select p.id from productos as p, ventas as v where p.id = v.id_producto)
    ...> ;
 ┌────┬────────────────────┬───────────┬────────┐
 │ id │       nombre       │ categoria │ precio │
