@@ -238,7 +238,7 @@ select * from empleados;
           IF done THEN
               LEAVE read_loop;
           END IF;
-          select id, nombre, salario from empleados where salario between salario_min and salario_max;
+          select count(id) from empleados where salario between salario_min and salario_max;
       END LOOP;
       CLOSE cur;
   END //
@@ -262,13 +262,11 @@ Call rango_salarios(5000, 10000000);
 
 Solo da resultado la 2 ya que no hay salarios ni menores de 3000 ni mayores de 5000
 
-+----+--------+---------+
-| id | nombre | salario |
-+----+--------+---------+
-|  1 | Juan   | 3465.00 |
-|  2 | María  | 4042.50 |
-|  3 | Pedro  | 3696.00 |
-+----+--------+---------+
++-----------+
+| count(id) |
++-----------+
+|         3 |
++-----------+
 ```
 
 <br>
