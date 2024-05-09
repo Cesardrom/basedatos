@@ -300,7 +300,7 @@ select * from empleados;
 +----+--------+---------+
 
 
-```delete from empleados where salario = emp_sal;
+```
 
 <br>
 
