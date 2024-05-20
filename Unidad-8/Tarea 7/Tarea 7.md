@@ -64,6 +64,20 @@ DELIMITER ;
 ```sql
 call my_loop(10, 'César', 1300, 2300);
 select * from persona;
++----+---------+--------------+----------+-------+---------+------+----------+
+| Id | Nombre  | Salario_base | Subsidio | Salud | Pension | Bono | Integral |
++----+---------+--------------+----------+-------+---------+------+----------+
+|  1 | César0  |      2158.00 |     NULL |  NULL |    NULL | NULL |     NULL |
+|  2 | César1  |      1825.00 |     NULL |  NULL |    NULL | NULL |     NULL |
+|  3 | César2  |      1563.00 |     NULL |  NULL |    NULL | NULL |     NULL |
+|  4 | César3  |      1572.00 |     NULL |  NULL |    NULL | NULL |     NULL |
+|  5 | César4  |      2112.00 |     NULL |  NULL |    NULL | NULL |     NULL |
+|  6 | César5  |      2289.00 |     NULL |  NULL |    NULL | NULL |     NULL |
+|  7 | César6  |      1782.00 |     NULL |  NULL |    NULL | NULL |     NULL |
+|  8 | César7  |      1565.00 |     NULL |  NULL |    NULL | NULL |     NULL |
+|  9 | César8  |      1997.00 |     NULL |  NULL |    NULL | NULL |     NULL |
+| 10 | César9  |      2162.00 |     NULL |  NULL |    NULL | NULL |     NULL |
++----+---------+--------------+----------+-------+---------+------+----------+
 ```
 
 <br>
@@ -72,7 +86,7 @@ select * from persona;
 
 <br>
 
-#### *Función subsidio_transporte: El subsidio de transporte equivale al 7% al salario básico. Actualiza el valor en la tabla.*
+#### ***Creacion de funcion general para los porcentajes con salario base***
 
 <br>
 
@@ -83,23 +97,15 @@ select * from persona;
 ```sql
 delimiter //
 
-create function subsidio_transporte(In id_dado int)returns real deterministic
+create function porcentaje_salario(Salario_base decimal(10, 2), porcentaje decimal(10, 2))returns real deterministic 
 begin
-declare result real;
-    select Salario_base * 0.07 from persona into result;
-    update persona set Subsidio = result where id = id_dado;
-return result
+    declare result real;
+    set result = Salario_base * (porcentaje / 100)
+return result;
 end //
 
 delimiter ;
 ```
-<br>
-
----
-
-<br>
-
-#### *Función salud: La salud que corresponde al 4% al salario básico. Actualiza el valor en la tabla.*
 
 <br>
 
@@ -107,16 +113,5 @@ delimiter ;
 
 <br>
 
-```sql
-delimiter //
 
-create function subsidio_transporte(in salario_base decimal(10, 2)) returns real deterministic
-begin
-declare result real;
-set result = 0.07 * salario_base
-return result
-end //
-
-delimiter ;
-```
 
