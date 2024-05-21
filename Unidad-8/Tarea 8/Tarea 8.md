@@ -168,6 +168,30 @@ select * from alumnos;
 
 <br>
 
+#### *Creacion de funcion auxiliar para el procedimiento*
+
+<br>
+
+---
+
+<br>
+
+```sql
+drop function if exists Aleatory_column;
+DELIMITER //
+CREATE Function Aleatory_column(columna varchar(100), number_al int)returns varchar(100) deterministic 
+begin
+    return concat(columna, floor(Rand() + number_al));
+end //
+
+DELIMITER ;
+```
+<br>
+
+---
+
+<br>
+
 #### ***Creacion de procedimiento para la insercion de datos***
 
 <br>
@@ -189,9 +213,9 @@ BEGIN
     DECLARE ins_apellido2 VARCHAR(100);
     DECLARE ins_nota DECIMAL(10, 2);
     WHILE contador <= num_alumnos DO
-        SET ins_nombre = concat(ins_nombre_base, floor(Rand() + contador));
-        SET ins_apellido1 = concat(ins_apellido1_base, floor(Rand() + contador));
-        SET ins_apellido2 = concat(ins_apellido2_base, floor(Rand() + contador));
+        SET ins_nombre = Aleatory_column(ins_nombre_base, contador);
+        SET ins_apellido1 = Aleatory_column(ins_apellido1_base, contador);
+        SET ins_apellido2 = Aleatory_column(ins_apellido2_base, contador);
         SET ins_nota = ROUND(RAND() * (nota_max - nota_min) + nota_min, 2);
         INSERT INTO alumnos (Nombre, Apellido1, Apellido2, Nota) VALUES (ins_nombre, ins_apellido1, ins_apellido2, ins_nota);
         SET contador = contador + 1;
