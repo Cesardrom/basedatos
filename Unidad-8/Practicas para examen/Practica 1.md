@@ -168,6 +168,25 @@ DELIMITER ;
 ##### Crea una función que calcule el precio final después de aplicar un descuento, y un trigger que use esta función para actualizar el precio de un producto antes de insertarlo en la tabla products.
 
 ```sql
+DROP FUNCTION IF EXISTS calcular_descuento;
+DELIMITER //
+CREATE FUNCTION calcular_descuento(price_in DECIMAL(10, 2), discount_in DECIMAL(10, 2)) RETURNS DECIMAL(10, 2) DETERMINISTIC
+BEGIN
+return price_in * (discount_in / 100);
+END //
+
+DELIMITER;
+
+DROP TRIGGER IF EXISTS aplicar_descuento;
+DELIMITER //
+CREATE TRIGGER aplicar_descuento
+before INSERT on products
+FOR EACH ROW
+BEGIN
+    SET NOW.price = calcular_descuento(NOW.price, NOW.discount_percentage);
+END //
+
+DELIMITER ;
 
 ```
 
