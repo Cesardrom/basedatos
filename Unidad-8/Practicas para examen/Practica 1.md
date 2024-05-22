@@ -102,7 +102,10 @@ END //
 
 DELIMITER ;
 
-
+CALL insert_users(10, 'David', 'David_pro@gmail.com');
+select * from users;
+update users set username = 'Cesar1' where user_id='David108d8aa757';
+SELECT * from user_changes;
 ```
 
 ### ***Ejercicio 2: Procesamiento de Pedidos y Actualización de Inventario***
