@@ -10,6 +10,11 @@ CREATE TABLE price_changes (
     new_price DECIMAL(10,2),
     change_date DATETIME NOT NULL
 );
+-- Suponiendo que ya hubo cambios en los precios, aquí tienes algunos registros
+INSERT INTO price_changes (change_id, product_id, old_price, new_price, change_date) VALUES
+(UUID(), 101, 10.00, 9.50, '2024-05-21 10:00:00'),
+(UUID(), 102, 20.00, 18.00, '2024-05-21 11:00:00');
+
 
 CREATE TABLE products (
     product_id INT PRIMARY KEY,
@@ -17,11 +22,23 @@ CREATE TABLE products (
     price DECIMAL(10,2) NOT NULL,
     discount_percentage DECIMAL(5,2) DEFAULT 0
 );
+INSERT INTO products (product_id, name, price, discount_percentage) VALUES
+(101, 'Product A', 10.00, 5.00),
+(102, 'Product B', 20.00, 10.00),
+(103, 'Product C', 30.00, 15.00),
+(104, 'Product D', 40.00, 20.00);
+
 
 CREATE TABLE inventory (
     product_id INT PRIMARY KEY,
     stock INT NOT NULL
 );
+
+INSERT INTO inventory (product_id, stock) VALUES
+(101, 50),
+(102, 30),
+(103, 20),
+(104, 10);
 
 CREATE TABLE orders (
     order_id CHAR(36) PRIMARY KEY,
@@ -30,6 +47,11 @@ CREATE TABLE orders (
     quantity INT NOT NULL,
     status VARCHAR(20) DEFAULT 'pending'
 );
+INSERT INTO orders (order_id, customer_id, product_id, quantity, status) VALUES
+(UUID(), 1, 101, 2, 'pending'),
+(UUID(), 2, 102, 1, 'pending'),
+(UUID(), 3, 103, 5, 'pending');
+
 
 CREATE TABLE user_changes (
     change_id INT AUTO_INCREMENT PRIMARY KEY,
