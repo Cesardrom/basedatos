@@ -183,7 +183,7 @@ CREATE TRIGGER aplicar_descuento
 before INSERT on products
 FOR EACH ROW
 BEGIN
-    SET NOW.price = calcular_descuento(NOW.price, NOW.discount_percentage);
+    SET price = calcular_descuento(NOW.price, NOW.discount_percentage);
 END //
 
 DELIMITER ;
