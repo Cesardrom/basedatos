@@ -113,6 +113,31 @@ SELECT * from user_changes;
 ##### Crea un procedimiento almacenado que procese todos los pedidos pendientes, actualizando el estado del pedido a 'processed' y decrementando el inventario en la tabla inventory. Usa un cursor para recorrer los pedidos.
 
 ```sql
+DELIMITER //
+
+-- Procedimiento para procesar pedidos
+CREATE PROCEDURE process_pending_orders()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE orderId CHAR(36);
+    DECLARE productId INT;
+    DECLARE quantity INT;
+    DECLARE cur CURSOR FOR SELECT order_id, product_id, quantity FROM orders WHERE status = 'pending';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO orderId, productId, quantity;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        UPDATE orders SET status = 'processed' WHERE order_id = orderId;
+        UPDATE inventory SET stock = stock - quantity WHERE product_id = productId;
+    END LOOP;
+    CLOSE cur;
+END //
+
+DELIMITER ;
 
 ```
 
