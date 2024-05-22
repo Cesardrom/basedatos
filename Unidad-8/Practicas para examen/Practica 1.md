@@ -68,7 +68,7 @@ DROP FUNCTION IF EXISTS Random_id;
 DELIMITER //
 CREATE FUNCTION Random_id(principio Varchar(100)) returns VARCHAR(100) DETERMINISTIC
 BEGIN
-return SUBSTRING_INDEX(UUID(), '-', 1);
+return concat(principio, SUBSTRING_INDEX(UUID(), '-', 1));
 END //
 
 DELIMITER ;
@@ -80,10 +80,12 @@ BEGIN
   DECLARE contador INT DEFAULT 1;
   DECLARE username_ins VARCHAR(100);
   DECLARE email_ins VARCHAR(100);
-  WHILE contador < iteraciones DO
+  DECLARE user_id_ins VARCHAR(100);
+  WHILE contador <= iteraciones DO
     SET username_ins = Random_varchar(username_base, contador);
     SET email_ins = Random_varchar(email_base, contador);
-    INSERT INTO users(username, email) VALUES (username_ins, email_ins);
+    SET user_id_ins = Random_id(username_ins);
+    INSERT INTO users(user_id, username, email) VALUES (user_id_ins, username_ins, email_ins);
     SET contador = contador + 1;
   END WHILE;
 END //
