@@ -7,7 +7,7 @@
 
 ```
 
-### ***Ejercicio 2: Procesamiento de Pedidos y Actualización de Inventario ***
+### ***Ejercicio 2: Procesamiento de Pedidos y Actualización de Inventario***
 
 ##### Crea un procedimiento almacenado que procese todos los pedidos pendientes, actualizando el estado del pedido a 'processed' y decrementando el inventario en la tabla inventory. Usa un cursor para recorrer los pedidos.
 
