@@ -175,7 +175,7 @@ BEGIN
 return price_in * (discount_in / 100);
 END //
 
-DELIMITER;
+DELIMITER ;
 
 DROP TRIGGER IF EXISTS aplicar_descuento;
 DELIMITER //
