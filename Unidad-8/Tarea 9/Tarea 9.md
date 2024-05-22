@@ -23,6 +23,51 @@ CREATE TABLE IF NOT EXISTS alumnos (
 <br>
 
 
+### ***Crear función eliminar_acentos***
+
+<br>
+
+---
+
+<br>
+
+
+```sql
+DROP FUNCTION IF EXISTS eliminar_acentos;
+DELIMITER //
+
+CREATE FUNCTION eliminar_acentos(cadena VARCHAR(255))
+RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+    DECLARE resultado VARCHAR(255);
+    SET resultado = cadena;
+    
+    SET resultado = REPLACE(resultado, 'á', 'a');
+    SET resultado = REPLACE(resultado, 'é', 'e');
+    SET resultado = REPLACE(resultado, 'í', 'i');
+    SET resultado = REPLACE(resultado, 'ó', 'o');
+    SET resultado = REPLACE(resultado, 'ú', 'u');
+    SET resultado = REPLACE(resultado, 'Á', 'A');
+    SET resultado = REPLACE(resultado, 'É', 'E');
+    SET resultado = REPLACE(resultado, 'Í', 'I');
+    SET resultado = REPLACE(resultado, 'Ó', 'O');
+    SET resultado = REPLACE(resultado, 'Ú', 'U');
+
+    RETURN resultado;
+END //
+
+DELIMITER ;
+
+
+```
+
+<br>
+
+---
+
+<br>
+
 ### ***Crear función crear_email***
 
 <br>
@@ -33,23 +78,26 @@ CREATE TABLE IF NOT EXISTS alumnos (
 
 
 ```sql
-drop function if exists crear_email;
+DROP FUNCTION IF EXISTS crear_email;
 DELIMITER //
+
 CREATE FUNCTION crear_email(nombre VARCHAR(50), apellido1 VARCHAR(50), apellido2 VARCHAR(50), dominio VARCHAR(50))
 RETURNS VARCHAR(100)
 DETERMINISTIC
 BEGIN
     DECLARE email VARCHAR(100);
     SET email = CONCAT(
-        LOWER(nombre),
-        LOWER(apellido1),
-        LOWER(apellido2),
+        LOWER(eliminar_acentos(nombre)),
+        LOWER(eliminar_acentos(apellido1)),
+        LOWER(eliminar_acentos(apellido2)),
         '@',
         LOWER(dominio)
     );
     RETURN email;
 END //
+
 DELIMITER ;
+
 ```
 
 <br>
