@@ -97,7 +97,7 @@ CREATE TRIGGER Guardar_cambios_usuarios
 after UPDATE on users
 FOR EACH ROW
 BEGIN
-  INSERT INTO user_changes(user_id, old_username, new_username, old_email, new_email, change_date) values (OLD.user_id, OLD.username, NEW.username, OLD.email, NEW.email, DATE(NOW));
+  INSERT INTO user_changes(user_id, old_username, new_username, old_email, new_email, change_date) values (OLD.user_id, OLD.username, NEW.username, OLD.email, NEW.email, DATE());
 END //
 
 DELIMITER ;
