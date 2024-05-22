@@ -68,8 +68,10 @@ DROP FUNCTION IF EXISTS Random_id;
 DELIMITER //
 CREATE FUNCTION Random_id(principio Varchar(100)) returns VARCHAR(100) DETERMINISTIC
 BEGIN
-return concat(columna, floor(RAND() + number))
+return SUBSTRING_INDEX(UUID(), '-', 1);
 END //
+
+DELIMITER ;
 
 Drop procedure if exists insert_users;
 DELIMITER //
