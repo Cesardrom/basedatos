@@ -195,6 +195,54 @@ DELIMITER ;
 ##### Crea un procedimiento almacenado que genere pedidos aleatorios y otro procedimiento que procese esos pedidos, actualizando el inventario y el estado del pedido. Usa triggers para asegurar integridad en la cantidad de los pedidos.
 
 ```sql
+DELIMITER //
+
+-- Procedimiento para generar pedidos aleatorios
+CREATE PROCEDURE generate_random_orders(IN num_orders INT)
+BEGIN
+    DECLARE i INT DEFAULT 0;
+    WHILE i < num_orders DO
+        INSERT INTO orders (order_id, customer_id, product_id, quantity)
+        VALUES (UUID(), FLOOR(RAND() * 100) + 1, FLOOR(RAND() * 50) + 1, FLOOR(RAND() * 10) + 1);
+        SET i = i + 1;
+    END WHILE;
+END //
+
+-- Procedimiento para procesar pedidos
+CREATE PROCEDURE process_orders()
+BEGIN
+    DECLARE done INT DEFAULT FALSE;
+    DECLARE orderId CHAR(36);
+    DECLARE productId INT;
+    DECLARE quantity INT;
+    DECLARE cur CURSOR FOR SELECT order_id, product_id, quantity FROM orders WHERE status = 'pending';
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+
+    OPEN cur;
+    read_loop: LOOP
+        FETCH cur INTO orderId, productId, quantity;
+        IF done THEN
+            LEAVE read_loop;
+        END IF;
+        -- Actualizar el estado del pedido
+        UPDATE orders SET status = 'processed' WHERE order_id = orderId;
+        -- Decrementar el inventario
+        UPDATE inventory SET stock = stock - quantity WHERE product_id = productId;
+    END LOOP;
+    CLOSE cur;
+END //
+
+-- Trigger para asegurar cantidad positiva en pedidos
+CREATE TRIGGER check_quantity_before_insert
+BEFORE INSERT ON orders
+FOR EACH ROW
+BEGIN
+    IF NEW.quantity <= 0 THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Quantity must be greater than 0';
+    END IF;
+END //
+
+DELIMITER ;
 
 ```
 
