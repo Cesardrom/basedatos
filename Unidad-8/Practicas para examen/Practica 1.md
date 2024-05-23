@@ -203,5 +203,15 @@ DELIMITER ;
 ##### Crea una función que genere un UUID y un trigger que use esta función para registrar cualquier cambio en los precios de los productos en una tabla price_changes.
 
 ```sql
-
+DROP TRIGGER IF EXISTS registrar_cambio_precio;
+DELIMITER //
+CREATE TRIGGER registrar_cambio_precio
+AFTER UPDATE on products
+FOR EACH ROW
+BEGIN
+    IF OLD.price <> NEW.price THEN
+        INSERT INTO price_changes(change_id, product_id, old_price, new_price, change_date) values (Random_id('PEDIDO'), OLD.product_id, OLD.price, NEW.price, NOW());
+    END IF;
+END //
+DELIMITER ;
 ```
