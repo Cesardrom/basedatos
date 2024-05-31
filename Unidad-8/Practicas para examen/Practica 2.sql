@@ -241,7 +241,30 @@ BEGIN
 END //
 DELIMITER ;
 
+UPDATE persona
+SET fecha_transaccion = (SELECT DATE_ADD('2014-01-01', INTERVAL FLOOR(RAND() * 3650) DAY));
+
+
+DELIMITER $$
+
+CREATE TRIGGER after_persona_update
+AFTER UPDATE ON persona
+FOR EACH ROW
+BEGIN
+    IF EXISTS (SELECT * FROM total_transacciones WHERE persona_id = NEW.id) THEN
+        UPDATE total_transacciones
+        SET total = total + 1
+        WHERE persona_id = NEW.id;
+    ELSE
+        INSERT INTO total_transacciones (persona_id, total)
+        VALUES (NEW.id, 1);
+    END IF;
+END$$
+
+DELIMITER ;
+
 -- Para verificar los triggers, procedimientos y funciones
 SELECT * FROM producto;
 SELECT * FROM total_stocks;
 SELECT categoria_mayor_stock() AS CategoriaConMayorStock;
+
