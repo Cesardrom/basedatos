@@ -68,3 +68,4 @@ CREATE TABLE persona(
     fecha DATETIME,
     PRIMARY KEY (id)
 );
+
